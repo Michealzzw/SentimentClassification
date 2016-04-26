@@ -1,0 +1,6 @@
+*.txt
+bin/
+libsvm-3.21/
+*.zip
+*.fig
+*.ans
