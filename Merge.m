@@ -1,15 +1,16 @@
-tol = 1e-5;
+tol = 1e-4;
 d = 10;
-figure(3);
+%figure(3);
 fVa=fopen('Matrix_Value.txt','r');
 fID=fopen('Matrix_ID.txt','r');
 fw=fopen('ans.txt','w');
+feig=fopen('eigen.txt','w');
 for topic = 1:5
     tline = fgetl(fID);
     tline = fgetl(fVa);
     tline = str2num(tline);
-    dnum = tline(1)
-    topK = tline(2)   
+    dnum = tline(1);
+    topK = tline(2);  
     W = zeros(dnum,topK);
     Neighbour = zeros(dnum,topK);
     for docu = 1:dnum
@@ -42,6 +43,10 @@ for topic = 1:5
     %options.disp = 0; 
     options.isreal = 1; options.issym = 1; 
     [Y,eigenvals] = eigs(M,d+2,0,options);
+    for zzz=1:d
+        fprintf(feig,'%d\t',eigenvals(zzz+1,zzz+1));
+    end
+    fprintf(feig,'\n');
     %[Y,eigenvals] = jdqr(M,d+1);%change in using JQDR func
     Y = Y(:,2:d+1)'*sqrt(dnum); % bottom evect is [1,1,1,1...] with eval 0    
     tline = fgetl(fVa);
@@ -65,13 +70,14 @@ for topic = 1:5
     
     %figure(topic)
     %
-    subplot(1,5,topic);
+ %   subplot(1,5,topic);
+  hold on    
+    scatter(Y(1,AgainstL),Y(2,AgainstL),'r')
     hold on    
-    scatter3(Y(1,FavorL),Y(2,FavorL),Y(3,FavorL),'g')
+    scatter(Y(1,FavorL),Y(2,FavorL),'g')
+   
     hold on    
-    scatter3(Y(1,AgainstL),Y(2,AgainstL),Y(3,AgainstL),'r')
-    hold on    
-    scatter3(Y(1,NoneL),Y(2,NoneL),Y(3,NoneL),'k')
+    scatter(Y(1,NoneL),Y(2,NoneL),'k')
     
 end
 
@@ -84,7 +90,7 @@ fclose(fw);
 
 
 
-figure(4);
+%figure(4);
 fVa=fopen('st_Matrix_Value.txt','r');
 fID=fopen('st_Matrix_ID.txt','r');
 Yall = load('ans.txt');
@@ -93,9 +99,9 @@ for topic = 1:5
     tline = fgetl(fID);
     tline = fgetl(fVa);
     tline = str2num(tline);
-    dnum = tline(1)
-    topK = tline(2)
-    modelNum = tline(3)
+    dnum = tline(1);
+    topK = tline(2);
+    modelNum = tline(3);
     Ymodel = Yall(1+mark:mark+modelNum,:);
     mark = mark + modelNum;
     Y = zeros(dnum,d);
@@ -182,15 +188,17 @@ for topic = 1:5
     
     %figure(topic)
     %
-    subplot(1,5,topic);
+ %   subplot(1,5,topic);
+  hold on    
+    scatter(Y(1,AgainstL),Y(2,AgainstL),'r')
+      hold on    
+    scatter(Y(1,FavorL),Y(2,FavorL),'g')
+   
     hold on    
-    scatter3(Y(1,FavorL),Y(2,FavorL),Y(3,FavorL),'g')
-    hold on    
-    scatter3(Y(1,AgainstL),Y(2,AgainstL),Y(3,AgainstL),'r')
-    hold on    
-    scatter3(Y(1,NoneL),Y(2,NoneL),Y(3,NoneL),'k')
+  %  scatter(Y(1,NoneL),Y(2,NoneL),'k')
     fclose(fw);
 end
 
 fclose(fID);
 fclose(fVa);
+fclose(feig);

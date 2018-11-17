@@ -15,13 +15,49 @@ import java.util.Vector;
 public class NearestReplaceSVMCalulateK {
 	static String root = "../";
 	static String pathtrain = root+"ans_SVM_train_num.txt";
+	//static String patheigen = root+"eigen.txt";
 	static String pathtest = root+"ans_SVM_test_num.txt";
 	static String pathans = root+"libsvm-3.21/num.ans";
 	static int ParaK = 41;
 	static Vector<Vector<Double>> Features;
+	//static Vector<Vector<Double>> Eigen = new Vector<Vector<Double>>();
+	//static Vector<Double> Eig;
 	static Vector<Vector<Double>> FeaturesTest;
+	
 	static Vector<Integer> Label;
 	static Vector<Integer> LabelTest;
+//	public static int readEigenByLines(String fileName) {
+//		File file = new File(fileName);
+//		BufferedReader reader = null;
+//		int line = 0;
+//		try {
+//			reader = new BufferedReader(new FileReader(file));
+//			String tempString = null;
+//			tempString = null;
+//			line = 0;
+//			while ((tempString=reader.readLine())!=null)
+//			{
+//				String[] list = tempString.split("(\t)|( )");
+//				Vector<Double> vc = new Vector<Double>();
+//				Eigen.add(vc);
+//				for (int i = 0;i<list.length;i++)
+//				{
+//					vc.addElement(Double.parseDouble(list[i]));
+//				}
+//			}
+//			reader.close();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		} finally {
+//			if (reader != null) {
+//				try {
+//					reader.close();
+//				} catch (IOException e1) {
+//				}
+//			}
+//		}
+//		return line;
+//	}
 	public static int readFeatureByLines(String fileName) {
 		File file = new File(fileName);
 		BufferedReader reader = null;
@@ -33,7 +69,7 @@ public class NearestReplaceSVMCalulateK {
 			line = 0;
 			while ((tempString=reader.readLine())!=null)
 			{
-				String[] list = tempString.split("\t");
+				String[] list = tempString.split("(\t)|( )");
 				Label.addElement(Integer.parseInt(list[0]));
 				Vector<Double> now = new Vector<Double>();
 				for (int i = 1;i<list.length;i++)
@@ -66,9 +102,12 @@ public class NearestReplaceSVMCalulateK {
 			String tempString = null;
 			tempString = null;
 			line = 0;
+			double sumeigen = 0.0;
+	//		for (int i = 0;i<Eig.size();i++) sumeigen+=Eig.elementAt(i);
+		//	for (int i1 = 0;i1<Eig.size();i1++) System.out.println(Eig.elementAt(i1)/sumeigen);
 			while ((tempString=reader.readLine())!=null)
 			{
-				String[] list = tempString.split("\t");
+				String[] list = tempString.split("(\t)|( )");
 				Vector<Double> now = new Vector<Double>();
 				FeaturesTest.addElement(now);
 				LabelTest.addElement(Integer.parseInt(list[0]));
@@ -84,7 +123,7 @@ public class NearestReplaceSVMCalulateK {
 					Vector<Double> tmp = Features.elementAt(i);
 					for (int j = 0;j<tmp.size();j++)
 					{
-						sum+= (tmp.elementAt(j)-now.elementAt(j))*(tmp.elementAt(j)-now.elementAt(j));
+						sum+= (tmp.elementAt(j)-now.elementAt(j))*(tmp.elementAt(j)-now.elementAt(j));//*(Eig.elementAt(j)/sumeigen);
 					}
 					ID_Dis.put(i, sum);
 				}					
@@ -131,10 +170,12 @@ public class NearestReplaceSVMCalulateK {
 		return line;
 	}
 	public static void main(String[] args) {
+		//readEigenByLines(patheigen);
 		if (args.length>0)
 			ParaK = Integer.parseInt(args[0]);
 		for (int i = 1;i<=5;i++)
 		{
+			//Eig = Eigen.elementAt(i-1);
 			Features = new Vector<Vector<Double>>();
 			Label = new Vector<Integer>();
 			FeaturesTest = new Vector<Vector<Double>>();
@@ -145,6 +186,8 @@ public class NearestReplaceSVMCalulateK {
 			{
 				HashMap<Integer, Double> ID_Dis = new HashMap<Integer, Double>();
 				Vector<Double> now = Features.elementAt(j1);
+				double sumeigen = 0.0;
+				//for (int i1 = 0;i1<Eig.size();i1++) sumeigen+=Eig.elementAt(i1);
 				for (int i1 = 0; i1 < Features.size(); i1++)
 					if (i1!=j1)
 					{
@@ -152,7 +195,7 @@ public class NearestReplaceSVMCalulateK {
 						Vector<Double> tmp = Features.elementAt(i1);
 						for (int j = 0;j<tmp.size();j++)
 						{
-							sum+= (tmp.elementAt(j)-now.elementAt(j))*(tmp.elementAt(j)-now.elementAt(j));
+							sum+= (tmp.elementAt(j)-now.elementAt(j))*(tmp.elementAt(j)-now.elementAt(j));//*(Eig.elementAt(j)/sumeigen);
 						}
 						ID_Dis.put(i1, sum);
 					}					
@@ -193,7 +236,7 @@ public class NearestReplaceSVMCalulateK {
 				for (int k = 0;k<Features.size();k++) if (mark[k][j]) sum++;
 				if (sum>=max*0.99) { ParaK = j+1;}
 			}
-			System.out.println(max+" "+ParaK);
+			//System.out.println(max+" "+ParaK);
 			readTestByLines(pathtest.replace("num", String.valueOf(i)),pathans.replace("num", String.valueOf(i)));
 //			for (int j1 = 0;j1<FeaturesTest.size();j1++)
 //			{

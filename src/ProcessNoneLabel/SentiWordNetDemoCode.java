@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import TextProcessTool.TPT;
+
 public class SentiWordNetDemoCode {
 
 	private Map<String, Double> dictionary;
@@ -55,7 +57,7 @@ public class SentiWordNetDemoCode {
 					for (String synTermSplit : synTermsSplit) {
 						// Get synterm and synterm rank
 						String[] synTermAndRank = synTermSplit.split("#");
-						String synTerm = synTermAndRank[0] + "#"
+						String synTerm = TPT.Stemming(synTermAndRank[0]) + "#"
 								+ wordTypeMarker;
 
 						int synTermRank = Integer.parseInt(synTermAndRank[1]);

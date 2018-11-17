@@ -1,0 +1,31 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class Solution {
+    public static void main(String[] args)
+    {
+    	 Scanner str = new Scanner(System.in);
+    	 int n = str.nextInt();
+    	 int m = str.nextInt();
+    	 int[] machine = new int[n];
+    	 for (int i = 0;i<n;i++)
+    		 machine[i] = str.nextInt();
+    	 int max = machine[0];
+    	 for (int i = 0;i<n;i++) if (max<machine[i]) max = machine[i];
+    	 int sum = 0;
+    	 int ans = 0;
+    	 //System.out.println(max);
+    	 for (int i = 0;i<n;i++)
+    	 {
+    		 if (sum+machine[i]>max)
+    		 {
+    			 ans++;
+    			 sum = machine[i];
+    		 }
+    		 else sum+=machine[i];
+    	 }
+    	 ans++;
+    	 System.out.println(ans);
+    }
+}

@@ -1,6 +1,7 @@
 #!/bin/bash
 cd libsvm-3.21
-for i in {1..5}; do ./svm-train -c 10 -g 0.125 ../ans_SVM_train_$i.txt ; done
+for i in {1..5}; do ./svm-train ../ans_SVM_train_$i.txt ; done
+#for i in {1..5}; do ./svm-train -c 2 -g 0.125 ../ans_SVM_train_$i.txt ; done
 #./svm-train -c 8 -g 2 ../ans_SVM_train_1.txt
 #./svm-train -c 0.5 -g 2 ../ans_SVM_train_2.txt
 #./svm-train -c 2 -g 8 ../ans_SVM_train_3.txt
@@ -21,5 +22,5 @@ echo Hillary
 perl eval_topic.pl ../Hillary_Clinton_gold.txt ../Hillary_Clinton.txt
 echo Abortion
 perl eval_topic.pl ../Legalization_of_Abortion_gold.txt ../Legalization_of_Abortion.txt
-perl eval_topic.pl ../SemEval2016-Task6-subtaskA-testdata-gold.txt ../FinalAns.txt 
+perl eval_topic.pl ../SemEval2016-Task6-subtaskA-testdata-gold-origin.txt ../FinalAns.txt 
 echo 

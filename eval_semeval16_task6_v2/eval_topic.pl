@@ -146,7 +146,7 @@ foreach my $cat (@cats) {
 }
 $macroF = $macroF/$nCat;
 #print STDOUT sprintf("------------\n");
-print STDOUT sprintf("%.4f\t", $macroF);
+print STDOUT sprintf("%.4f\n", $macroF);
 
 
 sub printUsage {

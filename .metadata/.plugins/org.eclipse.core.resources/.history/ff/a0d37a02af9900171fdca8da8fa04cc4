@@ -1,0 +1,16 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class Solution {
+    public static void main(String[] args)
+    {
+    	 Scanner str = new Scanner(System.in);
+    	 int n = str.nextInt();
+    	 for (int i = 0;i<n;i++)
+    	 {
+    		 String now = str.nextLine();
+    		 int x = now.indexOf(" ");
+    	 }
+    }
+}

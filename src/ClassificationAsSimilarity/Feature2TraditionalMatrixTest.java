@@ -17,7 +17,7 @@ import TextProcessTool.TPT;
 
 public class Feature2TraditionalMatrixTest {
 	// 读特征、对每一个，求topk，输出k*k矩阵
-	static int ParaK = 10;
+	static int ParaK = 11;
 	static int GateOne = 80;
 	static String isStan = "st_";
 	static String Feature_path = "Feature.txt";
@@ -152,6 +152,7 @@ public class Feature2TraditionalMatrixTest {
 			FileWriter fw_Va = new FileWriter(Matrix_Value_path);
 			FileWriter fw_ID = new FileWriter(Matrix_ID_path);
 			FileWriter ans_ID = new FileWriter("ans_ID.txt");
+			FileWriter distri = new FileWriter("distribution.csv");
 			Iterator iter = Topic_Twitter_All_Feature.entrySet().iterator();
 			while (iter.hasNext()) {
 				int posi = 0;int nega = 0;
@@ -178,6 +179,48 @@ public class Feature2TraditionalMatrixTest {
 				for (int i = 0;i<allFeature.size();i++) MatrixDis[i][i] = 1.0;
 				for (int i = 0;i<T_P.size();i++)
 					if (T_P.elementAt(i).equals("FAVOR")) posi++; else nega++;
+				
+				
+				int gatenum= 0;
+				double[] distrimax = new double[30];
+				double[] distrimin = new double[30];
+				double[] distriaverage = new double[30];
+				for (int i = 0;i<30;i++) distrimax[i]=0.0;
+				for (int i = 0;i<30;i++) distriaverage[i]=0.0;
+				for (int i = 0;i<30;i++) distrimin[i]=1;
+				for (int i = 0; i < modelNum; i++) {
+					HashMap<Integer, Double> ID_Dis = new HashMap<Integer, Double>();
+					for (int j = 0; j < modelNum; j++)
+						if (j!=i)
+							ID_Dis.put(j, Matrix[i][j]);
+					List<HashMap.Entry<Integer, Double>> infoIds = new ArrayList<HashMap.Entry<Integer, Double>>(
+							ID_Dis.entrySet());
+					Collections.sort(infoIds, new Comparator<HashMap.Entry<Integer, Double>>() {
+						public int compare(HashMap.Entry<Integer, Double> o1, HashMap.Entry<Integer, Double> o2) {
+							// return (o2.getValue() - o1.getValue());
+							if ((o1.getValue() - o2.getValue()) < 0)
+								return 1;
+							else
+							if ((o1.getValue() - o2.getValue()) > 0)	
+								return -1;
+							else return 0;
+						}
+					});
+					int sum = 0;
+					for (int j = 0;j<ParaK*2;j++)
+					{
+						 int id = infoIds.get(j).getKey();
+						 if (T_P.elementAt(id).equals(T_P.elementAt(i)))
+							 sum++;
+					}
+					if (sum*2>ParaK*2) gatenum++; 
+					//System.out.println(mark);
+				}
+				//GateOne = modelNum-gatenum;
+				
+				
+				
+				
 				System.out.println("Gate "+GateOne);
 				for (int i = 0; i < allFeature.size(); i++) {
 					if (i>=modelNum) ans_ID.write(Topic_Twitter_All_ID.get(topic).elementAt(i)+"\n");
@@ -220,6 +263,12 @@ public class Feature2TraditionalMatrixTest {
 					// 排序后
 					fw.write(T_P.elementAt(i) + "\t");
 					int sum = 0;
+					for (int i1 = 0; i1 < 30; i1++) {
+						double va = infoIds.get(i1).getValue();
+						distriaverage[i1]+=va;
+						if (va>distrimax[i1])distrimax[i1] = va;
+						if (va<distrimin[i1])distrimin[i1] = va;
+					}
 					for (int i1 = 0; i1 < ParaK; i1++) {						
 						int id = infoIds.get(i1).getKey();
 						if (T_P.elementAt(id).equals(T_P.elementAt(i))) sum++;
@@ -241,6 +290,18 @@ public class Feature2TraditionalMatrixTest {
 					}
 
 				}
+				for (int i1 = 0; i1 < 30; i1++) {
+					distri.write((distriaverage[i1]/allFeature.size())+",");
+				}
+				distri.write("\n");
+				for (int i1 = 0; i1 < 30; i1++) {
+					distri.write(distrimax[i1]+",");
+				}
+				distri.write("\n");
+				for (int i1 = 0; i1 < 30; i1++) {
+					distri.write(distrimin[i1]+",");
+				}
+				distri.write("\n");
 				for (int i = 0;i<allFeature.size();i++)
 				{
 					int val = 0;
@@ -256,6 +317,7 @@ public class Feature2TraditionalMatrixTest {
 			}
 			fw.close();
 			fw_Va.close();
+			distri.close();
 			fw_ID.close();
 			ans_ID.close();
 

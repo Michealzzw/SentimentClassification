@@ -35,7 +35,7 @@ public class Twitter2Feature {
             line = 0;
             while ((tempString = reader.readLine()) != null) {
             	String[] list = tempString.split("\t");
-            	if (list[3].equals("NONE")) continue;
+            	//if (list[3].equals("NONE")) continue;
             	int id = Integer.parseInt(list[0]);
             	ID_Twitter.put(id, list[2]);
             	ID_Dispreposition.put(id, list[3]);

@@ -15,7 +15,7 @@ public class MergeSVM2FinalAns {
 	static String bin = "../";
 	static String path = bin+"libsvm-3.21/";
 	static String ID_path = bin+"ans_ID.txt";
-	static String test_path = bin+"SemEval2016-Task6-subtaskA-testdata-gold.txt";
+	static String test_path = bin+"SemEval2016-Task6-subtaskA-testdata-gold-origin.txt";
 	static String NoneAnsPath = bin+"NoneLabelAns.txt";
 	static HashMap<String, String> ID2Ans = new HashMap<String, String>();
 	static HashMap<String, FileWriter> Topic_Fw = new HashMap<String, FileWriter>();
@@ -111,6 +111,7 @@ public class MergeSVM2FinalAns {
 		BufferedReader reader = null;
 		int line = 0;
 		try {
+			FileWriter spssfw = new FileWriter(bin+"spss.txt");
 			reader = new BufferedReader(new FileReader(file));
 			String tempString = null;
 			tempString = null;
@@ -129,6 +130,10 @@ public class MergeSVM2FinalAns {
 					Topic_Fw_Gold.get(topic).write(firstline+"\n");
 				}
 				Topic_Fw_Gold.get(topic).write(tempString+"\n");
+				if (tempString.contains(ID2Ans.get(tempString.split("\t")[0])))
+					spssfw.write(tempString.split("\t")[0]+",3,1\n");
+				else
+					spssfw.write(tempString.split("\t")[0]+",3,0\n");
 				if (None_Ans.containsKey(tempString.split("\t")[0]))
 					tempString = tempString.replaceAll("(UNKNOWN)|(AGAINST)|(FAVOR)|(NONE)", "NONE");
 				else
@@ -138,6 +143,7 @@ public class MergeSVM2FinalAns {
 			}
 			reader.close();
 			fw.close();
+			spssfw.close();
 			Iterator iter = Topic_Fw.entrySet().iterator();
 			while (iter.hasNext()) {
 				HashMap.Entry entry = (HashMap.Entry) iter.next();

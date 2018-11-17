@@ -17,7 +17,7 @@ import TextProcessTool.TPT;
 
 public class Feature2TraditionalMatrix {
 	// 读特征、对每一个，求topk，输出k*k矩阵
-	static int ParaK = 14;
+	static int ParaK = 10;//14
 	static String isStan = "";
 	static String Feature_path = "Feature.txt";
 	static String Matrix_path = isStan+"Matrix.txt";

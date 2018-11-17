@@ -1,5 +1,9 @@
 package TextProcessTool;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -11,6 +15,34 @@ import PosterStemmer.Stemmer;
 
 public class TPT {
 	static Stemmer stem = new Stemmer();
+	static HashMap<String, Object> StopList = new HashMap<String, Object>();
+	static String Stoplist_path ="stopword-list.txt";
+	public static int readStopByLines(String fileName) {
+		File file = new File(fileName);
+		BufferedReader reader = null;
+		int line = 0;
+		try {
+			reader = new BufferedReader(new FileReader(file));
+			String tempString = null;
+			tempString = null;
+			line = 0;
+			while ((tempString = reader.readLine()) != null) {
+				StopList.put(TPT.Stemming(tempString), null);
+				StopList.put(tempString, null);
+			}
+			reader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (reader != null) {
+				try {
+					reader.close();
+				} catch (IOException e1) {
+				}
+			}
+		}
+		return line;
+	}
 	public static String Stemming(String word)
 	{
 		stem.add(word.toCharArray(),word.length());
@@ -29,10 +61,34 @@ public class TPT {
 		Sent = Sent.replaceAll("[^a-zA-Z]+", " ");
 		
 		Matcher wordMc = wordPt.matcher(Sent);
+		String preword = null;
+		String prepreword = null;
+		String preprepreword = null;
 		while (wordMc.find())
 		{
+//			if (StopList.size()==0)
+//			{
+//				readStopByLines(Stoplist_path);
+//			}
 			String word = Stemming(wordMc.group().toLowerCase());
+		//	if (!StopList.containsKey(word))
+		//	if (!word.matches("(money|user|number|year|date|rate|time)"))
 			words.addElement(word);
+//			if (preword!=null)
+//			{
+//				words.addElement(preword+word);
+//			}
+//			if (prepreword!=null)
+//			{
+//				words.addElement(prepreword+preword+word);
+//			}
+//			if (preprepreword!=null)
+//			{
+//				words.addElement(preprepreword+prepreword+preword+word);
+//			}
+//			preprepreword = prepreword;
+			prepreword = preword;
+			preword = word;
 		}
 		return words;
 	}

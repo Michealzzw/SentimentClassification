@@ -1,0 +1,72 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class Solution {
+    public static void main(String[] args)
+    {
+    	 Scanner str = new Scanner(System.in);
+    	 String head = str.nextLine();
+    	 int n = Integer.parseInt(head.substring(0, head.indexOf(":")));
+    	 boolean emptyLine = Boolean.parseBoolean(head.substring( head.indexOf(":")+1,head.length()-1));
+    	 String now = str.nextLine();
+    	 List<String[]> result = new ArrayList<String[]>();
+    	 String[] nowSeg = new String[n];
+    	 int mark = 0;
+    	 int prespace = 0;
+    	 int nowspace = 0;
+    	 int preNodeNum = 0;
+    	 while (true)
+    	 {
+    		 now = str.nextLine();
+    		 System.out.println(now.charAt(0));
+    		 if (now.charAt(0)==']') break;
+    		 preNodeNum++;
+    		 now = str.nextLine();
+    		 while (now.charAt(0)!=']')
+    		 {
+    			 int len = now.length();
+    			 String tmp = "";
+    			 int l = 0;
+    			 while (l<len&&now.charAt(l)==' ') l++;
+    			 int r = len-1;
+    			 while (r>=0 && now.charAt(r)==' ') r--;
+    			 if (l<=r)
+    				 tmp = now.substring(l,r+1);
+    			 if (tmp.length()==0) prespace++;
+    			 if (tmp.length()>0||emptyLine)
+    			 {
+    				 if (tmp.length()==0) nowspace++;
+    				 nowSeg[mark++] = tmp;
+    				 if (mark==n)
+    				 {
+    					 mark = 0;
+    					 result.add(nowSeg);
+    					 nowSeg = new String[n];
+    				 }
+    			 }
+    			 now = str.nextLine();
+    		 }
+    	 }
+    	 if (mark!=0)
+    	 {
+    		 for (int i = mark;i<n;i++) nowSeg[i] = "";
+    		 nowspace+=n-mark;
+    	 }
+    	 System.out.println(result.size());
+    	 System.out.println(result.size()-preNodeNum);
+    	 System.out.println(nowspace-prespace);
+    	 System.out.println(nowspace);
+    	 System.out.println("[");
+    	 for (int i = 0;i<result.size();i++)
+    	 {
+    		 System.out.println("[");
+    		 nowSeg = result.get(i);
+    		 for (int j = 0;j<n;j++)
+    			 System.out.println(nowSeg[j]);
+    		 System.out.println("]");
+    	 }
+    	 System.out.println("]");
+    	 
+    }
+}

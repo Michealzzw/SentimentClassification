@@ -17,7 +17,7 @@ import TextProcessTool.TPT;
 
 public class Feature2TraditionalMatrix {
 	// 读特征、对每一个，求topk，输出k*k矩阵
-	static int ParaK = 10;
+	static int ParaK = 11;
 	static int GateOne = 80;
 	static String isStan = "";
 	static String Feature_path = "Feature.txt";
@@ -135,6 +135,38 @@ public class Feature2TraditionalMatrix {
 				for (int i = 0;i<T_P.size();i++)
 					if (T_P.elementAt(i).equals("FAVOR")) posi++; else nega++;
 			
+				int gatenum= 0;
+				
+				for (int i = 0; i < allFeature.size(); i++) {
+					HashMap<Integer, Double> ID_Dis = new HashMap<Integer, Double>();
+					for (int j = 0; j < allFeature.size(); j++)
+						if (j!=i)
+							ID_Dis.put(j, Matrix[i][j]);
+					List<HashMap.Entry<Integer, Double>> infoIds = new ArrayList<HashMap.Entry<Integer, Double>>(
+							ID_Dis.entrySet());
+					Collections.sort(infoIds, new Comparator<HashMap.Entry<Integer, Double>>() {
+						public int compare(HashMap.Entry<Integer, Double> o1, HashMap.Entry<Integer, Double> o2) {
+							// return (o2.getValue() - o1.getValue());
+							if ((o1.getValue() - o2.getValue()) < 0)
+								return 1;
+							else
+							if ((o1.getValue() - o2.getValue()) > 0)	
+								return -1;
+							else return 0;
+						}
+					});
+					int sum = 0;
+					for (int j = 0;j<ParaK*2;j++)
+					{
+						 int id = infoIds.get(j).getKey();
+						 if (T_P.elementAt(id).equals(T_P.elementAt(i)))
+							 sum++;
+					}
+					if (sum*2>ParaK*2) gatenum++; 
+					//System.out.println(mark);
+				}
+				//GateOne = allFeature.size()-gatenum;
+				
 				System.out.println("Gate "+GateOne);
 				for (int i = 0; i < allFeature.size(); i++) {
 					HashMap<Integer, Double> ID_Dis = new HashMap<Integer, Double>();

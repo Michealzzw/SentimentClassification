@@ -17,7 +17,7 @@ import TextProcessTool.TPT;
 
 public class Feature2TraditionalMatrixTest {
 	// 读特征、对每一个，求topk，输出k*k矩阵
-	static int ParaK = 14;
+	static int ParaK = 10; // 14
 	static String isStan = "st_";
 	static String Feature_path = "Feature.txt";
 	static String Feature_test_path = "Feature_test.txt";
@@ -92,7 +92,10 @@ public class Feature2TraditionalMatrixTest {
 			FileWriter fw_ID = new FileWriter(Matrix_ID_path);
 			FileWriter ans_ID = new FileWriter("ans_ID.txt");
 			Iterator iter = Topic_Twitter_All_Feature.entrySet().iterator();
+			int topic_id = 1;
 			while (iter.hasNext()) {
+				FileWriter ans_fw= new FileWriter("libsvm-3.21/"+topic_id+".ans");
+				topic_id++;
 				HashMap.Entry entry = (HashMap.Entry) iter.next();
 				String topic = (String) entry.getKey();
 				int modelNum = Topic_Number.get(topic);
@@ -131,10 +134,14 @@ public class Feature2TraditionalMatrixTest {
 
 					// 排序后
 					fw.write(T_P.elementAt(i) + "\t");
+//					int posi = 0;
+//					int nega = 0;
 					for (int i1 = 0; i1 < ParaK; i1++) {
 						int id = infoIds.get(i1).getKey();
 						fw.write(id + "\t" + T_P.elementAt(id) + "\t" + Matrix[i][id]+"\t");
 						fw_ID.write(id+"\t");
+						//if (T_P.elementAt(id).equals("FAVOR")) posi++;
+						//else nega++;
 					}
 					fw.write("\n");
 					fw_ID.write("\n");
@@ -148,8 +155,13 @@ public class Feature2TraditionalMatrixTest {
 						fw.write("\n");
 						fw_Va.write("\n");
 					}
-
+//					if (i>=modelNum)
+//					if (posi>nega)
+//					ans_fw.write("1\n");
+//					else
+//						ans_fw.write("-1\n");
 				}
+				ans_fw.close();
 				for (int i = 0;i<allFeature.size();i++)
 				{
 					int val = 0;

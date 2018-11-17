@@ -1,0 +1,34 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class Solution {
+    public static void main(String[] args)
+    {
+    	 Scanner str = new Scanner(System.in);
+    	 String head = str.nextLine();
+    	 int n = Integer.parseInt(head.substring(0, head.indexOf(":")));
+    	 boolean emptyLine = Boolean.parseBoolean(head.substring( head.indexOf(":")+1,head.length()-1));
+    	 String now = str.nextLine();
+    	 List<String[]> result = new ArrayList<String[]>();
+    	 String[] nowSeg = new String[n];
+    	 while (true)
+    	 {
+    		 now = str.nextLine();
+    		 if (now.charAt(0)==']') break;
+    		 now = str.nextLine();
+    		 while (now.charAt(0)!=']')
+    		 {
+    			 int len = now.length();
+    			 String tmp = "";
+    			 int l = 0;
+    			 while (l<len&&now.charAt(l)==' ') l++;
+    			 int r = len-1;
+    			 while (r>=0 && now.charAt(r)==' ') r--;
+    			 if (l<=r)
+    				 tmp = now.substring(l,r+1);
+    		 }
+    	 }
+    	 
+    }
+}

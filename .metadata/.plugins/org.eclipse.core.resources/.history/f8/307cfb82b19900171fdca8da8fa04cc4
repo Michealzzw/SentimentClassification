@@ -1,0 +1,76 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class Solution {
+    public static void main(String[] args)
+    {
+    	 Scanner str = new Scanner(System.in);
+    	 int[][] matrix = new int[10][10];
+    	 int n = 0;
+    	 while (str.hasNextLine())
+    	 {
+    		 String now = str.nextLine();
+    		 if (now.length()>0&&now.charAt(1)=='F') break;
+    		 if (now.length()<1) continue;
+    		 for (int i = 0;i<now.length();i++)
+    			 if (now.charAt(i)=='1'||now.charAt(i)=='0')
+    			 {
+    				 matrix[n][i] = (int)(now.charAt(i)-'0');
+    			 }
+    		 n++;
+    	 }
+    	 int changeFlag = 1;
+    	 while (changeFlag>0)
+    	 {
+    		 changeFlag = 0;
+    		 for (int i = 0;i<n;i++)
+    		 {
+    			 int l = n;
+    			 int r = 0;
+    			 for (int j = 0;j<n;j++)
+    			 {
+    				 if (matrix[i][j]==1)
+    				 {
+    					 if (j<l) l = j;
+    					 if (j>r) r = j;
+    				 }
+    			 }
+    			 if (l<r)
+    				 for (int j = l;j<=r;j++)
+    					 if (matrix[i][j]==0)
+    					 {
+    						 changeFlag++;
+    						 matrix[i][j] = 1;
+    					 }
+    		 }
+    		 for (int i = 0;i<n;i++)
+    		 {
+    			 int l = n;
+    			 int r = 0;
+    			 for (int j = 0;j<n;j++)
+    			 {
+    				 if (matrix[j][i]==1)
+    				 {
+    					 if (j<l) l = j;
+    					 if (j>r) r = j;
+    				 }
+    			 }
+    			 if (l<r)
+    				 for (int j = l;j<=r;j++)
+    					 if (matrix[j][i]==0)
+    					 {
+    						 changeFlag++;
+    						 matrix[j][i] = 1;
+    					 }
+    		 }
+    	 }
+    	 System.out.println();
+    	 for (int i = 0;i<n;i++)
+    	 {
+    		 for (int j = 0;j<n;j++)
+    			 System.out.print(matrix[i][j]);
+    		 System.out.println();
+    	 }
+    }
+}

@@ -33,9 +33,21 @@ public class Twitter2Feature {
             String tempString = null;
             tempString = reader.readLine();
             line = 0;
+            int nonesum = 0;
+            String pre_topic = "";
             while ((tempString = reader.readLine()) != null) {
             	String[] list = tempString.split("\t");
-            	if (list[3].equals("NONE")) continue;
+            	if (list[3].equals("NONE")) 
+            		{
+            		if (!list[1].equals(pre_topic))
+            		{
+            			System.out.println(pre_topic+" "+nonesum);
+            			nonesum = 0;
+            			pre_topic = list[1];
+            		}
+            		nonesum++;
+            		continue;
+            		}
             	int id = Integer.parseInt(list[0]);
             	ID_Twitter.put(id, list[2]);
             	ID_Dispreposition.put(id, list[3]);
@@ -43,6 +55,7 @@ public class Twitter2Feature {
             		Topic_ID.put(list[1], new Vector<Integer>());
             	Topic_ID.get(list[1]).add(id);
             }
+            System.out.println(pre_topic+" "+nonesum);
             reader.close();
         } catch (IOException e) {
             e.printStackTrace();
